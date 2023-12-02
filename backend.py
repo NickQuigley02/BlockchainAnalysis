@@ -12,6 +12,7 @@ def timestamp_to_datetime(timestamp): #this is some bull shit to convert epoch t
     return datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
 backend.jinja_env.filters['timestamp_to_datetime'] = timestamp_to_datetime   
+
 @backend.route('/') #basic index page of the site, provides a truly welcoming environment.
 def index():
     return 'Welcome to the BTC Transaction dashboard!'
@@ -34,10 +35,30 @@ def get_transaction_data(transaction_id):
     response = requests.get(blockchaincom_url)
     
     if response.status_code == 200: ##assuming all goes well
-        print(response.json())
-        return(response.json())
+        transaction_data = response.json()
+
+        #fetchs the USD value using CoinGecko API
+        btc_amount = transaction_data['out'][0]['value'] / 100000000
+        usd_value = get_usd_value(btc_amount, transaction_data['time'])
+
+        #adds the USD value to the transaction data
+        transaction_data['usd_value'] = usd_value
+        print(transaction_data['usd_value'])
+        return(transaction_data)
     else:
         return None
+        
+def get_usd_value(btc_amount, timestamp):
+    coingecko_url = f'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&date={timestamp}'
+    response = requests.get(coingecko_url)
+    
+    if response.status_code == 200:
+        bitcoin_to_usd = response.json()['bitcoin']['usd']
+        usd_value = btc_amount * bitcoin_to_usd
+        print(f"BTC Amount: {btc_amount}, Bitcoin to USD: {bitcoin_to_usd}, USD Value: {usd_value}")
+        return usd_value
+    else:
+        return None        
 
 if __name__ == '__main__':
     backend.run(debug=True)

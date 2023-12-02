@@ -10,7 +10,9 @@
 
     <p><strong>Transaction Hash:</strong> {{ transaction_data.hash }}</p>
     <p><strong>Amount (BTC):</strong> {{ transaction_data.out[0].value / 100000000 }}</p>
-    <p><strong>Date of Transaction:</strong> {{ transaction_data.time | timestamp_to_datetime }}</p>
+	
+    <p><strong>Amount (USD):</strong> {{ transaction_data.usd_value }}</p>
+	<p><strong>Date of Transaction:</strong> {{ transaction_data.time | timestamp_to_datetime }}</p>
 
     <h3>Inputs:</h3>
     <ul>
