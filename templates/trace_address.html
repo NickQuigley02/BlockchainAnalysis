@@ -11,29 +11,31 @@
     <ul>
         {% for transaction in transactions %}
             <li>
-                <p><strong>Transaction ID:</strong> {{ transaction.transaction_id }}</p>
-                <p><strong>Date:</strong> {{ transaction.date }}</p> 
-				<p><strong>Amount (BTC):</strong> {{ transaction.out[0].value / 100000000 }}</p>
-				<p><strong>Amount (USD):</strong> {{ transaction.usd_value }}</p>
-
-				<h3>Inputs:</h3>
 				<ul>
-					{% for input in transaction.inputs %}
-						<li>
-							<strong>Address:</strong> {{ input.prev_out.addr }}<br>
-							<strong>Value:</strong> {{ input.prev_out.value / 100000000 }}
-						</li>
-					{% endfor %}
-				</ul>
+					<li><p><strong>Transaction ID:</strong> {{ transaction.transaction_id }}</p></li>
+					<li><p><strong>Date:</strong> {{ transaction.date }}</p> </li>
+					<li><p><strong>Amount (BTC):</strong> {{ transaction.out[0].value / 100000000 }}</p></li>
+					<li><p><strong>Amount (USD):</strong> {{ transaction.usd_value }}</p></li>
 
-				<h3>Outputs:</h3>
-				<ul>
-					{% for output in transaction.out %}
-						<li>
-							<strong>Address:</strong> {{ output.addr }}<br>
-							<strong>Value:</strong> {{ output.value / 100000000 }}
-						</li>
-					{% endfor %}
+					<h3>Inputs:</h3>
+					<ul>
+						{% for input in transaction.inputs %}
+							<li>
+								<strong>Address:</strong> {{ input.prev_out.addr }}<br>
+								<strong>Value:</strong> {{ input.prev_out.value / 100000000 }}
+							</li>
+						{% endfor %}
+					</ul>
+
+					<h3>Outputs:</h3>
+					<ul>
+						{% for output in transaction.out %}
+							<li>
+								<strong>Address:</strong> {{ output.addr }}<br>
+								<strong>Value:</strong> {{ output.value / 100000000 }}
+							</li>
+						{% endfor %}
+					</ul>
 				</ul>
             </li>
         {% endfor %}
