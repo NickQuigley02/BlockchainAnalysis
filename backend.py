@@ -49,7 +49,6 @@ def get_transaction_data(transaction_id):
 
         ##adds the USD value to the transaction data
         transaction_data['usd_value'] = usd_value
-        print(transaction_data['usd_value'])
         return(transaction_data)
     else:
         return None
@@ -69,51 +68,18 @@ def get_usd_value(btc_amount, timestamp):
         
 def get_subsequent_transactions(wallet_address):
     ##this function finds from wallet data -> Transaction data, so we can string together for some amount of depth.
-    '''conn = http.client.HTTPSConnection("rest.cryptoapis.io")
-    path = f'/blockchain-data/bitcoin/testnet/addresses/{wallet_address}/transactions-by-time-range'
-    querystring = "limit=50&offset=0&fromTimestamp=1236238648&toTimestamp=1644417868"
 
-    params = {
-        "limit": limit,
-        "offset": 0, 
-        "fromTimestamp": start_date,
-        "toTimestamp": end_date
-    }
-
-    headers = {
-        'Content-Type': 'application/json',
-        'X-API-Key': CRYPTO_API
-    }
-    
-    
-    full_path = f"{path}?{querystring}"
-    
-    
-    conn.request("GET", full_path, headers=headers)
-
-    res = conn.getresponse()
-    data = res.read()
-
-    print(data.decode("utf-8"))
-
-    response = data.decode("utf-8")'''
     
     blockchair_url = f'https://api.blockchair.com/bitcoin/dashboards/address/{wallet_address}?transaction_details=true&omni=true&limit=10'
     response = requests.get(blockchair_url)
     
-    print(response)
-    print('TEST1')
     if 1==1:##response.status_code == 200:
         wallet_data = response.json()
-        print('TEST2')
-        print(wallet_data)
-        
-        print(wallet_address)
         
         
         
         transactions = wallet_data.get('data', {}).get(wallet_address, {}).get('transactions', []) ##this API gives a list of transactiond made by an account. We're going to go through and only go over ones in the "Accepted date range"
-        print(transactions)
+
         
         ##you'll never guess what this does \/
         filtered_transactions = []
@@ -129,7 +95,6 @@ def get_subsequent_transactions(wallet_address):
                 ##'output': transaction_details['output']
                 'inputs': transaction_details['inputs']
             })
-        print(filtered_transactions)
         return filtered_transactions
 
     else:
